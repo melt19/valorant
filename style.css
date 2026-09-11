@@ -190,19 +190,19 @@ button, input { font-family: inherit; }
 }
 
 .map-side-btn {
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    color: var(--text);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    padding: 10px 22px;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
-    min-width: 100px;
-    text-align: center;
-  }
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 10px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+  min-width: 100px;
+  text-align: center;
+}
 
 .map-side-btn:hover {
   border-color: var(--accent);
