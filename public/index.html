@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lineup Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <h1 class="brand">LINEUP<span class="brand-accent">BOARD</span></h1>
+    <p class="brand-sub">Ability lineups, one clip per line-up.</p>
+  </div>
+</header>
+
+<nav class="agent-tabs" id="agentTabs" aria-label="Select agent">
+  <!-- populated by app.js -->
+</nav>
+
+<main class="board">
+
+  <!-- Map select grid -->
+  <section id="mapView">
+    <div class="section-head">
+      <h2 class="section-title">Pick a map</h2>
+      <p class="section-sub" id="mapViewSub"></p>
+    </div>
+    <div class="map-grid" id="mapGrid"></div>
+  </section>
+
+  <!-- Clip list for a chosen map -->
+  <section id="clipView" hidden>
+    <div class="section-head clip-head">
+      <button class="back-btn" id="backBtn">&larr; Maps</button>
+      <div>
+        <h2 class="section-title" id="clipViewTitle"></h2>
+        <p class="section-sub" id="clipViewSub"></p>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="control-group control-search">
+        <label for="searchInput">Search this map</label>
+        <input id="searchInput" type="text" placeholder="ability, site, callout…" autocomplete="off">
+      </div>
+      <div class="result-count" id="resultCount"></div>
+    </div>
+    <div class="grid" id="clipGrid"></div>
+    <p id="emptyState" class="empty-state" hidden>
+      No clips match that search.
+    </p>
+  </section>
+
+</main>
+
+<div class="lightbox" id="lightbox" hidden>
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <div class="lightbox-video" id="lightboxVideo"></div>
+    <div class="lightbox-meta" id="lightboxMeta"></div>
+  </div>
+</div>
+
+<footer class="foot">
+  <p>Edit <code>data/lineups.json</code> to add lineups, and <code>agentThemes</code> in <code>app.js</code> to theme a new agent.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "sunset-vyse-a-main-flash",
+    "map": "Sunset",
+    "agent": "Vyse",
+    "ability": "Arc Rose",
+    "title": "A Main flash on entry",
+    "note": "Thrown blind from spawn, pops right as attackers round the corner.",
+    "youtubeId": "REPLACE_ME_1"
+  },
+  {
+    "id": "sunset-vyse-b-razorvine-wall",
+    "map": "Sunset",
+    "agent": "Vyse",
+    "ability": "Razorvine",
+    "title": "B site wall off market",
+    "note": "Splits the site in half, buys time for a rotate.",
+    "youtubeId": "REPLACE_ME_2"
+  },
+  {
+    "id": "lotus-vyse-a-lobby-flash",
+    "map": "Lotus",
+    "agent": "Vyse",
+    "ability": "Arc Rose",
+    "title": "A Lobby flash for rubble control",
+    "note": "Placed from A Tree, blinds anyone pushing rubble.",
+    "youtubeId": "REPLACE_ME_3"
+  },
+  {
+    "id": "lotus-vyse-c-lobby-flash",
+    "map": "Lotus",
+    "agent": "Vyse",
+    "ability": "Arc Rose",
+    "title": "C Lobby flash through main",
+    "note": "Slows the push and blinds anyone holding an angle from C Main.",
+    "youtubeId": "REPLACE_ME_4"
+  },
+  {
+    "id": "icebox-vyse-a-site-trap",
+    "map": "Icebox",
+    "agent": "Vyse",
+    "ability": "Shear",
+    "title": "A site tower trap",
+    "note": "Catches anyone dropping from tower onto site.",
+    "youtubeId": "REPLACE_ME_5"
+  },
+  {
+    "id": "bind-vyse-b-site-wall",
+    "map": "Bind",
+    "agent": "Vyse",
+    "ability": "Razorvine",
+    "title": "B site hookah wall",
+    "note": "Cuts off hookah from short, forces a slower retake.",
+    "youtubeId": "REPLACE_ME_6"
+  },
+  {
+    "id": "ascent-vyse-mid-flash",
+    "map": "Ascent",
+    "agent": "Vyse",
+    "ability": "Arc Rose",
+    "title": "Mid flash from A main",
+    "note": "One throw covers both mid doors.",
+    "youtubeId": "REPLACE_ME_7"
+  }
+]
