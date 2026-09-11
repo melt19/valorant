@@ -145,10 +145,18 @@ button, input { font-family: inherit; }
   gap: 18px;
   transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
-.map-card:hover, .map-card:focus-visible {
+/* .map-card:hover, .map-card:focus-visible {
   transform: translateY(-3px);
   border-color: var(--accent);
   box-shadow: 0 12px 32px -16px var(--accent-wash);
+} */
+
+.map-card-header {
+  padding: 0px 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .map-card-image {
@@ -156,12 +164,12 @@ button, input { font-family: inherit; }
   margin: none;
   padding: none;
   width: 100%;
-  min-width: 300px;
+  align-items: center;
+  min-width: 200px;
   border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .map-card-name {
-  padding: 0px 10px;
   font-size: 22px;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -179,10 +187,12 @@ button, input { font-family: inherit; }
   width: 100%;
   justify-content: space-around;
   
-  span {
+}
+
+.map-side-btn {
     background: var(--bg-raised);
     border: 1px solid var(--line);
-    color: var(--text-dim);
+    color: var(--text);
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.03em;
@@ -194,10 +204,11 @@ button, input { font-family: inherit; }
     text-align: center;
   }
 
-  span:hover {
-    border-color: var(--accent);
-    box-shadow: 0 12px 32px -16px var(--accent-wash);
-  }
+.map-side-btn:hover {
+  border-color: var(--accent);
+  box-shadow: 0 12px 32px -16px var(--accent-wash);
+  transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+
 }
 
 /* Controls (search bar in clip view) */

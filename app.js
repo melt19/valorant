@@ -1,5 +1,5 @@
 // Theme per agent. Add an entry here when you add a new agent's first
-// lineup to data/lineups.json — anything not listed falls back to `default`.
+// lineup to data/lineups.js — anything not listed falls back to `default`.
 const agentThemes = {
   Vyse: {
     bg: "#150F1C",
@@ -33,8 +33,9 @@ const agentThemes = {
 const state = {
   lineups: [],
   agent: null,
-  view: "maps",   // "maps" | "clips"
+  view: "maps",
   map: null,
+  side: null,
   search: "",
 };
 
@@ -61,14 +62,21 @@ init();
 
 async function init() {
   try {
-    const res = await fetch("data/lineups.json");
-    state.lineups = await res.json();
+    const { default: lineupData } = await import("./data/lineups.js");
+    state.lineups = lineupData;
   } catch (err) {
-    els.mapGrid.innerHTML = `<p style="color:var(--text-dim)">Couldn't load data/lineups.json. If you're opening this file directly, run it through a local server instead (see README).</p>`;
+    console.error("Couldn't load data/lineups.js:", err);
+
+    els.mapGrid.innerHTML = `
+      <p style="color:var(--text-dim)">
+        Couldn't load data/lineups.js. Make sure the file exists and
+        that you're running the site through a local server.
+      </p>
+    `;
     return;
   }
 
-  const agents = uniqueSorted(state.lineups.map(l => l.agent));
+  const agents = Object.keys(state.lineups).sort();
   state.agent = agents[0] || null;
 
   buildAgentTabs(agents);
@@ -77,9 +85,68 @@ async function init() {
   renderMapView();
 }
 
+
+/**
+ * Converts the nested lineups.js structure:
+ *
+ * {
+ *   Vyse: {
+ *     ascent: {
+ *       ...
+ *     }
+ *   },
+ *   Brimstone: {
+ *     ascent: {
+ *       ...
+ *     }
+ *   }
+ * }
+ *
+ * into the flat array the rest of the UI expects:
+ *
+ * [
+ *   {
+ *     agent: "Vyse",
+ *     map: "Ascent",
+ *     ...
+ *   }
+ * ]
+ */
+function flattenLineups(data) {
+  const result = [];
+
+  for (const [agent, maps] of Object.entries(data || {})) {
+    if (!maps || typeof maps !== "object") continue;
+
+    for (const [map, lineups] of Object.entries(maps)) {
+      if (!Array.isArray(lineups)) continue;
+
+      for (const lineup of lineups) {
+        result.push({
+          ...lineup,
+          agent,
+          map: formatMapName(map),
+        });
+      }
+    }
+  }
+
+  return result;
+}
+
+function formatMapName(map) {
+  return String(map)
+    .replace(/[-_]/g, " ")
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
 function buildAgentTabs(agents) {
   els.agentTabs.innerHTML = agents.map(agent => `
-    <button class="agent-tab" role="tab" data-agent="${escapeAttr(agent)}" aria-selected="${agent === state.agent}">
+    <button
+      class="agent-tab"
+      role="tab"
+      data-agent="${escapeAttr(agent)}"
+      aria-selected="${agent === state.agent}">
       ${escapeHtml(agent)}
     </button>
   `).join("");
@@ -87,8 +154,13 @@ function buildAgentTabs(agents) {
   els.agentTabs.addEventListener("click", (e) => {
     const btn = e.target.closest(".agent-tab");
     if (!btn) return;
+
     state.agent = btn.dataset.agent;
-    [...els.agentTabs.children].forEach(c => c.setAttribute("aria-selected", c === btn));
+
+    [...els.agentTabs.children].forEach(c =>
+      c.setAttribute("aria-selected", c === btn)
+    );
+
     applyTheme(state.agent);
     showMapView();
   });
@@ -97,6 +169,7 @@ function buildAgentTabs(agents) {
 function applyTheme(agent) {
   const theme = agentThemes[agent] || agentThemes.default;
   const root = document.documentElement.style;
+
   root.setProperty("--bg", theme.bg);
   root.setProperty("--bg-raised", theme.bgRaised);
   root.setProperty("--bg-card", theme.bgCard);
@@ -108,22 +181,35 @@ function applyTheme(agent) {
 
 function bindControls() {
   els.backBtn.addEventListener("click", showMapView);
+
   els.searchInput.addEventListener("input", () => {
     state.search = els.searchInput.value.trim().toLowerCase();
     renderClipGrid();
   });
+
   els.lightboxClose.addEventListener("click", closeLightbox);
+
   els.lightbox.addEventListener("click", (e) => {
     if (e.target === els.lightbox) closeLightbox();
   });
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeLightbox();
   });
 }
 
 function agentLineups() {
-  return state.lineups.filter(l => l.agent === state.agent);
+  const maps = state.lineups[state.agent] || {};
+
+  return Object.entries(maps).flatMap(([map, lineups]) =>
+    lineups.map(lineup => ({
+      ...lineup,
+      agent: state.agent,
+      map: formatMapName(map),
+    }))
+  );
 }
+
 
 function showMapView() {
   state.view = "maps";
@@ -139,52 +225,113 @@ function renderMapView() {
   const lineups = agentLineups();
   const maps = uniqueSorted(lineups.map(l => l.map));
 
-  els.mapViewSub.textContent = `${state.agent} · ${lineups.length} clip${lineups.length === 1 ? "" : "s"} across ${maps.length} map${maps.length === 1 ? "" : "s"}`;
+  els.mapViewSub.textContent =
+    `${state.agent} · ${lineups.length} clip${lineups.length === 1 ? "" : "s"} across ${maps.length} map${maps.length === 1 ? "" : "s"}`;
 
   els.mapGrid.innerHTML = maps.map(map => {
     const count = lineups.filter(l => l.map === map).length;
+    const attackCount = lineups.filter(l => l.map === map && l.side == "attack").length;
+    const defenseCount = lineups.filter(l => l.map === map && l.side == "defense").length;
+
     return `
       <div class="map-card" data-map="${escapeAttr(map)}">
-        <img src="data/${String(map).toLowerCase()}.webp" class="map-card-image"/>
-        <span class="map-card-name">${escapeHtml(map)}</span>
+        <img
+          src="data/${String(map).toLowerCase()}.webp"
+          class="map-card-image"
+        />
+
+        <span class="map-card-header">
+          <span class="map-card-name">${escapeHtml(map)}</span>
+          <span class="map-card-count">
+            <strong>${count}</strong>
+            lineup${count === 1 ? "" : "s"}
+          </span>
+        </span>
+
         <div class="map-side-selector">
-          <span>Attack</span>
-          <span>Defence</span>
+          <button
+            type="button"
+            class="map-side-btn"
+            data-side="Attack">
+            Attack · ${attackCount}
+          </button>
+
+          <button
+            type="button"
+            class="map-side-btn"
+            data-side="Defence">
+            Defence · ${defenseCount}
+          </button>
         </div>
-        <span class="map-card-count"><strong>${count}</strong> lineup${count === 1 ? "" : "s"}</span>
       </div>
     `;
   }).join("");
 
   [...els.mapGrid.querySelectorAll(".map-card")].forEach(card => {
-    card.addEventListener("click", () => openMap(card.dataset.map));
+    const map = card.dataset.map;
+
+    // Clicking the map itself could still open the map with no side filter.
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".map-side-btn")) return;
+
+      openMap(map, null);
+    });
+
+    card.querySelectorAll(".map-side-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        openMap(map, btn.dataset.side);
+      });
+    });
   });
+
 }
 
-function openMap(map) {
+function openMap(map, side = null) {
   state.view = "clips";
   state.map = map;
+  state.side = side;
   state.search = "";
+
   els.searchInput.value = "";
   els.mapView.hidden = true;
   els.clipView.hidden = false;
+
   els.clipViewTitle.textContent = map;
-  els.clipViewSub.textContent = state.agent;
+
+  els.clipViewSub.textContent =
+    side ? `${state.agent} · ${side}` : state.agent;
+
   renderClipGrid();
   els.searchInput.focus();
 }
 
+
 function renderClipGrid() {
   const filtered = agentLineups().filter(l => {
     if (l.map !== state.map) return false;
-    if (state.search) {
-      const haystack = `${l.title} ${l.ability} ${l.note}`.toLowerCase();
-      if (!haystack.includes(state.search)) return false;
+
+    if (state.side && l.side !== state.side) {
+      return false;
     }
+
+    if (state.search) {
+      const haystack =
+        `${l.title || ""} ${l.ability || ""} ${l.note || ""}`.toLowerCase();
+
+      if (!haystack.includes(state.search)) {
+        return false;
+      }
+    }
+
     return true;
   });
 
-  els.resultCount.textContent = `${filtered.length} clip${filtered.length === 1 ? "" : "s"}`;
+
+  els.resultCount.textContent =
+    `${filtered.length} clip${filtered.length === 1 ? "" : "s"}`;
+
   els.emptyState.hidden = filtered.length !== 0;
 
   els.clipGrid.innerHTML = filtered.map(l => `
@@ -198,6 +345,7 @@ function renderClipGrid() {
   [...els.clipGrid.querySelectorAll(".card")].forEach(card => {
     card.addEventListener("click", () => {
       const lineup = state.lineups.find(l => l.id === card.dataset.id);
+
       if (lineup) openLightbox(lineup);
     });
   });
@@ -212,10 +360,14 @@ function openLightbox(lineup) {
       allowfullscreen>
     </iframe>
   `;
+
   els.lightboxMeta.innerHTML = `
-    <strong>${escapeHtml(lineup.map)} · ${escapeHtml(lineup.agent)}</strong><br>
+    <strong>
+      ${escapeHtml(lineup.map)} · ${escapeHtml(lineup.agent)}
+    </strong><br>
     ${escapeHtml(lineup.ability)} — ${escapeHtml(lineup.note || "")}
   `;
+
   els.lightbox.hidden = false;
   els.lightboxClose.focus();
 }
@@ -231,7 +383,11 @@ function uniqueSorted(arr) {
 
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, c => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
   }[c]));
 }
 
