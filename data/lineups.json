@@ -61,5 +61,14 @@
     "title": "Mid flash from A main",
     "note": "One throw covers both mid doors.",
     "youtubeId": "REPLACE_ME_7"
+  },
+  {
+    "id": "summit-vyse-b-site",
+    "map": "Summit",
+    "agent": "Vyse",
+    "ability": "Razorvine",
+    "title": "B Site Lineups", 
+    "note":  "Beep boop",
+    "youtubeId": "H-7FLPX5VwI"
   }
 ]
