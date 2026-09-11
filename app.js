@@ -144,7 +144,7 @@ function renderMapView() {
   els.mapGrid.innerHTML = maps.map(map => {
     const count = lineups.filter(l => l.map === map).length;
     return `
-      <button class="map-card" data-map="${escapeAttr(map)}">
+      <div class="map-card" data-map="${escapeAttr(map)}">
         <img src="data/${String(map).toLowerCase()}.webp" class="map-card-image"/>
         <span class="map-card-name">${escapeHtml(map)}</span>
         <div class="map-side-selector">
@@ -152,7 +152,7 @@ function renderMapView() {
           <span>Defence</span>
         </div>
         <span class="map-card-count"><strong>${count}</strong> lineup${count === 1 ? "" : "s"}</span>
-      </button>
+      </div>
     `;
   }).join("");
 
