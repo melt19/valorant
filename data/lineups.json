@@ -72,5 +72,14 @@
     "title": "B Site Lineups", 
     "note":  "Beep boop",
     "youtubeId": "H-7FLPX5VwI"
+  },
+  {
+    "id": "summit-brimstone-a-site",
+    "map": "Summit",
+    "agent": "Brimstone",
+    "ability": "Molly",
+    "title": "Postplant Molly for A", 
+    "note":  "Beep boop",
+    "youtubeId": "ZvHG4YluOr0"
   }
 ]

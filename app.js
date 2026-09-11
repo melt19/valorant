@@ -10,6 +10,15 @@ const agentThemes = {
     accent2: "#8B6FE0",
     accentWash: "rgba(230, 79, 196, 0.12)",
   },
+  Brimstone: {
+    bg: "#231E21",
+    bgRaised: "#292327",
+    bgCard: "#2b2226",
+    line: "#5C4B4C",
+    accent: "#A52F17",
+    accent2: "#7F3319",
+    accentWash: "#a52f1733",
+  },
   default: {
     bg: "#0F1512",
     bgRaised: "#171F1B",
