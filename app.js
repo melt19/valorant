@@ -136,6 +136,7 @@ function renderMapView() {
     const count = lineups.filter(l => l.map === map).length;
     return `
       <button class="map-card" data-map="${escapeAttr(map)}">
+        <img src="data/${String(map).toLowerCase()}.webp" width="250"/>
         <span class="map-card-name">${escapeHtml(map)}</span>
         <span class="map-card-count"><strong>${count}</strong> lineup${count === 1 ? "" : "s"}</span>
       </button>
