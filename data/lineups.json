@@ -1,18 +1,20 @@
 [
   {
-    "id": "sunset-vyse-a-main-flash",
-    "map": "Sunset",
-    "agent": "Vyse",
-    "ability": "Arc Rose",
-    "title": "A Main flash on entry",
-    "note": "Thrown blind from spawn, pops right as attackers round the corner.",
-    "youtubeId": "REPLACE_ME_1"
-  },
-  {
-    "id": "sunset-vyse-b-razorvine-wall",
+    "id": "sunset-vyse-b-defence-from-a",
     "map": "Sunset",
     "agent": "Vyse",
     "ability": "Razorvine",
+    "side": "Defence",
+    "title": "Defensive Thorn Lineup",
+    "note": "Lineup for A, Play B",
+    "youtubeId": "3zvaHVr1bJs"
+  },
+  {
+    "id": "sunset-vyse-b-defence",
+    "map": "Sunset",
+    "agent": "Vyse",
+    "ability": "Razorvine",
+    "side": "Defence",
     "title": "B site wall off market",
     "note": "Splits the site in half, buys time for a rotate.",
     "youtubeId": "REPLACE_ME_2"

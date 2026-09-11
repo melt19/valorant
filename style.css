@@ -134,7 +134,7 @@ button, input { font-family: inherit; }
   background: var(--bg-card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 28px 24px;
+  padding: 0 0 15px 0;
   text-align: left;
   cursor: pointer;
   color: var(--text);
@@ -150,7 +150,18 @@ button, input { font-family: inherit; }
   border-color: var(--accent);
   box-shadow: 0 12px 32px -16px var(--accent-wash);
 }
+
+.map-card-image {
+  position: relative;
+  margin: none;
+  padding: none;
+  width: 100%;
+  min-width: 300px;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
 .map-card-name {
+  padding: 0px 10px;
   font-size: 22px;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -158,8 +169,36 @@ button, input { font-family: inherit; }
 .map-card-count {
   font-size: 13px;
   color: var(--text-dim);
+  padding: 0px 10px;
 }
 .map-card-count strong { color: var(--accent); font-weight: 600; }
+
+.map-side-selector {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+  
+  span {
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+    min-width: 100px;
+    text-align: center;
+  }
+
+  span:hover {
+    border-color: var(--accent);
+    box-shadow: 0 12px 32px -16px var(--accent-wash);
+  }
+}
 
 /* Controls (search bar in clip view) */
 .controls {
@@ -212,10 +251,12 @@ input[type="text"] {
   color: var(--text);
   transition: transform 160ms ease, border-color 160ms ease;
 }
+
 .card:hover, .card:focus-visible {
   border-color: var(--accent);
   transform: translateY(-2px);
 }
+
 .card-title {
   font-size: 16px;
   font-weight: 600;
